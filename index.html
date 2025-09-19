@@ -1,82 +1,185 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Página Web Simple</title>
+  <meta charset="utf-8" />
+  <title>Panel de Prueba · Turnos Bolera</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f5f5f5;
-      color: #333;
+    :root{
+      --bg:#0b0c10; --card:#11131a; --muted:#8a8f98; --fg:#fff; --brand:#3b82f6; --ok:#22c55e; --warn:#f59e0b; --err:#ef4444;
     }
-    header {
-      background: #4CAF50;
-      color: white;
-      padding: 1rem;
-      text-align: center;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 20% -10%, #1b1f2a 0%, #0b0c10 55%); color:var(--fg);
+      display:flex; align-items:center; justify-content:center; padding:24px;
     }
-    nav {
-      background: #333;
-      padding: 0.5rem;
-      text-align: center;
+    .wrap{
+      width:min(100%, 760px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border:1px solid rgba(255,255,255,0.08); border-radius:24px; padding:clamp(20px,4vw,40px);
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
     }
-    nav a {
-      color: white;
-      margin: 0 10px;
-      text-decoration: none;
+    h1{margin:0;font-size:clamp(20px,3vw,28px);font-weight:700;letter-spacing:.3px;text-align:center}
+    .subtitle{margin-top:6px;color:var(--muted);font-size:14px;text-align:center}
+    .status{margin-top:16px; display:flex; gap:10px; align-items:center; justify-content:center; color:var(--muted); font-size:12px}
+    .dot{width:10px; height:10px; border-radius:50%}
+    .ok{background:var(--ok)} .warn{background:var(--warn)} .err{background:var(--err)}
+    .turn{
+      margin-top:28px; text-align:center;
     }
-    nav a:hover {
-      text-decoration: underline;
+    .label{color:var(--muted);font-size:14px;letter-spacing:.3px}
+    .big{ font-size: clamp(72px, 16vw, 140px); font-weight:800; line-height:.9; letter-spacing:-2px; text-shadow:0 8px 30px rgba(0,0,0,.45) }
+    .controls{
+      margin-top:28px; display:flex; flex-wrap:wrap; gap:12px; justify-content:center; align-items:center;
     }
-    main {
-      padding: 2rem;
+    .btn{
+      appearance:none; border:none; cursor:pointer; padding:14px 18px; border-radius:12px; font-weight:700;
+      background:var(--brand); color:white; box-shadow: 0 10px 24px rgba(59,130,246,.25);
     }
-    footer {
-      background: #333;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
+    .btn:disabled{opacity:.6; cursor:not-allowed}
+    .ghost{ background:transparent; color:#e5e7eb; border:1px solid rgba(255,255,255,.15); box-shadow:none }
+    .input{
+      width:130px; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.15); background:#0b0f1a; color:#fff; outline:none;
+      text-align:center;
     }
+    .row{display:flex; gap:10px; align-items:center}
+    .msg{margin-top:14px; text-align:center; font-size:12px; color:var(--muted)}
+    a{color:#93c5fd; text-decoration:none}
   </style>
 </head>
 <body>
+  <div class="wrap">
+    <h1>Panel de Prueba</h1>
+    <div class="subtitle">Pulsa para subir el turno en el servidor. Úsalo para tests rápidos.</div>
 
-  <header>
-    <h1>Bienvenido a mi página web</h1>
-    <p>Un ejemplo básico en HTML y CSS</p>
-  </header>
+    <div class="status">
+      <span class="dot warn" id="dot"></span>
+      <span id="stat">Conectando…</span>
+    </div>
 
-  <nav>
-    <a href="#inicio">Inicio</a>
-    <a href="#sobre">Sobre mí</a>
-    <a href="#contacto">Contacto</a>
-  </nav>
+    <div class="turn">
+      <div class="label">Turno actual</div>
+      <div class="big" id="current">—</div>
+    </div>
 
-  <main>
-    <section id="inicio">
-      <h2>Inicio</h2>
-      <p>Esta es una página web sencilla creada con HTML y CSS. Puedes modificar el contenido y los estilos para personalizarla.</p>
-    </section>
+    <div class="controls">
+      <button class="btn" id="incBtn">Siguiente (+1)</button>
 
-    <section id="sobre">
-      <h2>Sobre mí</h2>
-      <p>Aquí puedes escribir información sobre ti, tus intereses o tu proyecto.</p>
-    </section>
+      <!-- Opcional: bajar y fijar -->
+      <button class="btn ghost" id="decBtn">-1</button>
+      <div class="row">
+        <input class="input" id="setInput" type="number" placeholder="Ej: 120" />
+        <button class="btn ghost" id="setBtn">Fijar</button>
+      </div>
+    </div>
 
-    <section id="contacto">
-      <h2>Contacto</h2>
-      <p>Puedes poner aquí tu correo electrónico o enlaces a tus redes sociales.</p>
-    </section>
-  </main>
+    <div class="msg">
+      <p>Consejo: abre también <a href="./index.html" target="_blank">index.html</a> para ver cómo el número grande se actualiza.</p>
+    </div>
+  </div>
 
-  <footer>
-    <p>&copy; 2025 Mi Página Simple</p>
-  </footer>
+  <script>
+    // ============================
+    // CONFIG: ajusta estas URLs
+    // ============================
+    const VENUE_ID = 'bolera-centro';
 
+    // Deben existir en tu backend:
+    // - GET   /api/current?venue=...           → { current_turn: number }
+    // - POST  /api/admin/increment             → body: { venue_id } → { current_turn }
+    // - POST  /api/admin/set                   → body: { venue_id, current_turn } → { current_turn }
+    const API_CURRENT_URL   = 'https://tu-backend.example.com/api/current?venue=' + VENUE_ID;
+    const API_ADMIN_INC_URL = 'https://tu-backend.example.com/api/admin/increment';
+    const API_ADMIN_SET_URL = 'https://tu-backend.example.com/api/admin/set';
+    // ============================
+
+    const dot  = document.getElementById('dot');
+    const stat = document.getElementById('stat');
+    const cur  = document.getElementById('current');
+    const incBtn = document.getElementById('incBtn');
+    const decBtn = document.getElementById('decBtn');
+    const setBtn = document.getElementById('setBtn');
+    const setInput = document.getElementById('setInput');
+
+    function setStatus(kind, text){
+      dot.className = 'dot ' + (kind==='ok'?'ok':kind==='warn'?'warn':'err');
+      stat.textContent = text;
+    }
+
+    function fmt(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,' '); }
+
+    async function refresh(){
+      try{
+        const r = await fetch(API_CURRENT_URL, { cache:'no-store' });
+        if(!r.ok) throw new Error('HTTP '+r.status);
+        const j = await r.json();
+        cur.textContent = fmt(j.current_turn ?? 0);
+        setStatus('ok','Conectado');
+      }catch(e){
+        setStatus('err','Sin conexión');
+        console.error(e);
+      }
+    }
+
+    async function postJSON(url, body){
+      const r = await fetch(url, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(body)
+      });
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return r.json();
+    }
+
+    async function increment(delta){
+      try{
+        setBusy(true);
+        if (delta === 1){
+          const j = await postJSON(API_ADMIN_INC_URL, { venue_id: VENUE_ID });
+          cur.textContent = fmt(j.current_turn ?? 0);
+        } else if (delta === -1){
+          // Leer actual, restar 1 y fijar
+          const r = await fetch(API_CURRENT_URL, { cache:'no-store' });
+          const j = await r.json();
+          const next = Math.max((j.current_turn ?? 0) - 1, 0);
+          await setTurn(next);
+        }
+        setStatus('ok','Actualizado');
+      }catch(e){
+        console.error(e);
+        setStatus('err','Error al actualizar');
+      }finally{
+        setBusy(false);
+      }
+    }
+
+    async function setTurn(n){
+      try{
+        setBusy(true);
+        const j = await postJSON(API_ADMIN_SET_URL, { venue_id: VENUE_ID, current_turn: Number(n)||0 });
+        cur.textContent = fmt(j.current_turn ?? 0);
+        setStatus('ok','Turno fijado');
+      }catch(e){
+        console.error(e);
+        setStatus('err','No se pudo fijar');
+      }finally{
+        setBusy(false);
+      }
+    }
+
+    function setBusy(b){
+      incBtn.disabled = b; decBtn.disabled = b; setBtn.disabled = b; setInput.disabled = b;
+    }
+
+    // Eventos
+    incBtn.addEventListener('click', () => increment(1));
+    decBtn.addEventListener('click', () => increment(-1));
+    setBtn.addEventListener('click', () => setTurn(setInput.value));
+
+    // Arranque
+    refresh();
+  </script>
 </body>
 </html>
